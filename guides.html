@@ -23,4 +23,36 @@
 <div class="border-t border-violet-800/70"><div class="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-violet-200/65 sm:flex-row sm:items-center sm:justify-between lg:px-8"><p>© 2026 CallSizer. Planning estimates, not provider quotations.</p><p>Built for practical business telephony decisions in India.</p></div></div>
 </footer>
 <script>const menuButton=document.getElementById('menuButton');const mobileMenu=document.getElementById('mobileMenu');if(menuButton&&mobileMenu){menuButton.addEventListener('click',()=>{const hidden=mobileMenu.classList.toggle('hidden');menuButton.setAttribute('aria-expanded',String(!hidden));});}</script>
+
+<script>
+  // Local preview helper: keep clean production URLs in the HTML,
+  // but resolve them to the underlying .html files when opened via file://.
+  if (window.location.protocol === 'file:') {
+    document.addEventListener('DOMContentLoaded', function () {
+      const inGuides = window.location.pathname.replace(/\\/g, '/').includes('/guides/');
+      const rootPrefix = inGuides ? '../' : '';
+
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const raw = link.getAttribute('href');
+        if (!raw || raw.startsWith('#') || /^(https?:|mailto:|tel:|javascript:)/i.test(raw)) return;
+
+        const match = raw.match(/^([^?#]*)([?#].*)?$/);
+        if (!match) return;
+        let path = match[1];
+        const suffix = match[2] || '';
+
+        if (path === '/') {
+          link.setAttribute('href', rootPrefix + 'index.html' + suffix);
+          return;
+        }
+
+        if (path.startsWith('/')) path = path.slice(1);
+        if (!path || path.endsWith('.html')) return;
+
+        link.setAttribute('href', rootPrefix + path + '.html' + suffix);
+      });
+    });
+  }
+</script>
+
 </body></html>

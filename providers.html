@@ -72,4 +72,36 @@ if (menuButton && mobileMenu) {
 }
 
 </script>
+
+<script>
+  // Local preview helper: keep clean production URLs in the HTML,
+  // but resolve them to the underlying .html files when opened via file://.
+  if (window.location.protocol === 'file:') {
+    document.addEventListener('DOMContentLoaded', function () {
+      const inGuides = window.location.pathname.replace(/\\/g, '/').includes('/guides/');
+      const rootPrefix = inGuides ? '../' : '';
+
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const raw = link.getAttribute('href');
+        if (!raw || raw.startsWith('#') || /^(https?:|mailto:|tel:|javascript:)/i.test(raw)) return;
+
+        const match = raw.match(/^([^?#]*)([?#].*)?$/);
+        if (!match) return;
+        let path = match[1];
+        const suffix = match[2] || '';
+
+        if (path === '/') {
+          link.setAttribute('href', rootPrefix + 'index.html' + suffix);
+          return;
+        }
+
+        if (path.startsWith('/')) path = path.slice(1);
+        if (!path || path.endsWith('.html')) return;
+
+        link.setAttribute('href', rootPrefix + path + '.html' + suffix);
+      });
+    });
+  }
+</script>
+
 </body></html>
